@@ -9,22 +9,61 @@ function JsonParser() {
 
 }
 
-function isEmptyPair(pair) {
-    return pair !== "";
+function isValidPair(item) {
+    return (item.indexOf('[') === -1 && item.indexOf('{') === -1);
+}
+
+function isFoldEnd(item) {
+    return (item.indexOf(']') !== -1 || item.indexOf('}') !== -1);
 }
 
 JsonParser.prototype.parse = function (input) {
     var tree = {};
-    var pair = getPair(input);
-    if(isEmptyPair(pair)){
-        var key = getKey(pair);
-        var value = getValue(pair);
-        tree[key] = evalValue(value);
-    }
+    var content = getJsonObjContent(input);
+    var firstSplitContentToPairs = content && content.split(",");
+    var splitContentToPairs = splitToValidPairs(firstSplitContentToPairs);
+    _.forEach(splitContentToPairs, function (item) {
+        if(!isEmptyPair(item)){
+            var key = getKey(item);
+            var value = getValue(item);
+            tree[key] = evalValue(value);
+        }
+    });
     return tree;
 };
 
-function getPair(input) {
+
+function splitToValidPairs(firstSplitContentToPairs) {
+    var isDuringFold = false;
+    var foldedString = "";
+    var ans = [];
+    _.forEach(firstSplitContentToPairs, function (item) {
+        if (!isValidPair(item)) {
+            if (isFoldEnd(item)) {
+                ans.push(item);
+            }
+            else {
+                isDuringFold = true;
+                foldedString += item;
+            }
+        } else {
+            if (isDuringFold) {
+                foldedString += (',' + item);
+                if (isFoldEnd(item)) {
+                    item = foldedString.trim().slice(0, foldedString.length);
+                    isDuringFold = false;
+                    foldedString = "";
+                    ans.push(item);
+                }
+            } else {
+                ans.push(item);
+            }
+        }
+    });
+    return ans;
+}
+
+function getJsonObjContent(input) {
     return (input.slice(input.indexOf('{')+1, input.indexOf('}'))).trim();
 }
 
@@ -39,6 +78,10 @@ function getValue(input) {
     return (input.slice(input.indexOf(pairDelimiter)+1)).trim();
 }
 
+
+function isEmptyPair(pair) {
+    return pair === "";
+}
 
 function isNumeric(input) {
     return !isNaN(input);

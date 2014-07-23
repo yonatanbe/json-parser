@@ -53,4 +53,24 @@ describe("JSON parser Tests", function() {
         expect(jsonObj).toEqual({"b": [1, 2]});
     });
 
+    it("tests JSON simple string, number and boolean array parsing", function() {
+        var jsonObj = jsonParser.parse('{"b": ["abcde", 2, false]  }');
+        expect(jsonObj).toEqual({"b": ['abcde', 2, false]});
+    });
+
+    it("tests JSON 2 pairs parsing", function() {
+        var jsonObj = jsonParser.parse('{"a": 2   , "b"  : true   }');
+        expect(jsonObj).toEqual({"a": 2, "b": true});
+    });
+
+    it("tests JSON 2 pairs with 1 array value parsing", function() {
+        var jsonObj = jsonParser.parse('{"a": [2,true]   , "b"  : true   }');
+        expect(jsonObj).toEqual({"a": [2,true], "b": true});
+    });
+
+//    it("tests JSON - empty JSON object parsing", function() {
+//        var jsonObj = jsonParser.parse('{"a": {} }');
+//        expect(jsonObj).toEqual({"a": {}});
+//    });
+
 });
