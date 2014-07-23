@@ -68,9 +68,19 @@ describe("JSON parser Tests", function() {
         expect(jsonObj).toEqual({"a": [2,true], "b": true});
     });
 
-//    it("tests JSON - empty JSON object parsing", function() {
-//        var jsonObj = jsonParser.parse('{"a": {} }');
-//        expect(jsonObj).toEqual({"a": {}});
-//    });
+    it("tests JSON - empty JSON object parsing", function() {
+        var jsonObj = jsonParser.parse('{"a": {} }');
+        expect(jsonObj).toEqual({"a": {}});
+    });
+
+    it("tests JSON - simple nested JSON object parsing", function() {
+        var jsonObj = jsonParser.parse('{"a": {"b" : "abc"} }');
+        expect(jsonObj).toEqual({"a": {"b": "abc"}});
+    });
+
+    it("tests JSON - simple JSON object parsing", function() {
+        var jsonObj = jsonParser.parse('{"a": [1, ["abc"]] }');
+        expect(jsonObj).toEqual({"a": [1, ["abc"]]});
+    });
 
 });
