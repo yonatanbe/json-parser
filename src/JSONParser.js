@@ -28,6 +28,7 @@ function splitToValidPairs(arrayToFix) {
     var ans = [];
     for(var i = 0; i < arrayToFix.length; i++){
         if (!isValidPair(arrayToFix[i])) {
+//            var numOf
             do{
                 foldedString !== '' ?
                     (foldedString += (', '+arrayToFix[i])) : foldedString += arrayToFix[i];
@@ -41,6 +42,7 @@ function splitToValidPairs(arrayToFix) {
     return ans;
 }
 
+// TODO - refactor these next 2 funcs
 function getJsonObjContent(input) {
     return (input.slice(input.indexOf('{')+1, input.lastIndexOf('}'))).trim();
 }
@@ -74,6 +76,8 @@ function isStringTrue(value) {
     return value.trim() === 'true';
 }
 
+//TODO - refactor these next funcs!
+
 function isTypeString(value) {
     return value.trim().indexOf("\"") == 0;
 }
@@ -87,6 +91,7 @@ function isJsonObject(value) {
 }
 
 function removeWrappingFromString(input) {
+    input = input.trim();
     return input.slice(1, input.length-1);
 }
 
@@ -113,7 +118,7 @@ function evalValue(value) {
 
 function parseArray(value) {
     var array = [];
-    var unwrappedArray = removeWrappingFromString(value.trim());
+    var unwrappedArray = removeWrappingFromString(value);
     var splitArray = unwrappedArray && unwrappedArray.split(',');
     splitArray = splitToValidPairs(splitArray);
     _.forEach(splitArray, function (item) {

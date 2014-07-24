@@ -83,4 +83,19 @@ describe("JSON parser Tests", function() {
         expect(jsonObj).toEqual({"a": [1, ["abc"]]});
     });
 
+    it("should parse object with inner array", function () {
+        var jsonObj = jsonParser.parse('{ "a" :[1 , 2, [3 , 4 , 5]]}');
+        expect(jsonObj).toEqual({ a : [1, 2, [3,4,5]]});
+    });
+
+    it("should parse object with inner array", function () {
+        var jsonObj = jsonParser.parse('{ "a" :[1 , [3 , 4 , 5], 2]}');
+        expect(jsonObj).toEqual({ a : [1, [3,4,5], 2]});
+    });
+
+    it("should parse object with inner array", function () {
+        var jsonObj = jsonParser.parse('{ "a" :[1 , 2, { "b" : 5}, [3 , false , 5]]}');
+        expect(jsonObj).toEqual({ a : [1, 2, { b : 5 }, [3,false,5]]});
+    });
+
 });
