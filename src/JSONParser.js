@@ -23,16 +23,28 @@ JsonParser.prototype.parse = function (input) {
 };
 
 
+function getNumOfCharsInString(stringToCheck, arrayOfChars) {
+    var ans = 0;
+    console.log(stringToCheck);
+    _.forEach(arrayOfChars, function (char) {
+        ans += (stringToCheck.split(char).length) - 1;
+    });
+    console.log(ans);
+    return ans;
+}
+
 function splitToValidPairs(arrayToFix) {
     var foldedString = '';
     var ans = [];
+    var numOfBraces = 0;
     for(var i = 0; i < arrayToFix.length; i++){
         if (!isValidPair(arrayToFix[i])) {
-//            var numOf
             do{
+                numOfBraces += getNumOfCharsInString(arrayToFix[i], ['[', '{']);
                 foldedString !== '' ?
                     (foldedString += (', '+arrayToFix[i])) : foldedString += arrayToFix[i];
-            } while(!isFoldEnd(arrayToFix[i++]));
+                numOfBraces -= getNumOfCharsInString(arrayToFix[i++], [']', '}']);
+            } while(numOfBraces !== 0);
             i--;
             arrayToFix[i] = foldedString;
             foldedString = '';
@@ -131,9 +143,9 @@ function isValidPair(item) {
     return !isStartOrEndOfFold(item, ['[', '{']);
 }
 
-function isFoldEnd(item) {
-    return isStartOrEndOfFold(item, [']', '}']);
-}
+//function isFoldEnd(item) {
+//    return isStartOrEndOfFold(item, [']', '}']);
+//}
 
 function isStartOrEndOfFold(item, charArray) {
     return _.any(charArray, function (char) {
